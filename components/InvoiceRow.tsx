@@ -4,36 +4,44 @@ import { Invoice } from '@/types/invoice'
 import styled from "styled-components"
 import { useRouter } from 'next/navigation'
 import { StatusBadge } from './InvoiceDetail'
+import colors from '@/lib/constants/colors'
 import device from '@/lib/constants/breakpoints'
 
+import { useTheme } from '@/lib/context/ThemeContext';
+
 function InvoiceRow({ invoice }: { invoice: Invoice }) {
-  const router = useRouter()
-
+  const { isDark } = useTheme();
+  const router = useRouter();
+ 
   const handleRowClick = () => {
-    router.push(`/${invoice.id}`)
-  }
-
+    router.push(`/${invoice.id}`);
+  };
+  
   return (
-    <InvoiceRowContainer onClick={handleRowClick}>
-      <InvoiceId>#{invoice.id}</InvoiceId>
+    <InvoiceRowContainer $isDark={isDark} onClick={handleRowClick}>
+      <InvoiceId $isDark={isDark}>#{invoice.id}</InvoiceId>
       <InvoiceDate>{invoice.paymentDue}</InvoiceDate>
       <InvoiceCustomer>{invoice.billTo.name}</InvoiceCustomer>
-      <InvoiceAmount>{invoice.amount}</InvoiceAmount>
-      <StatusBadge $status={invoice.status}>
-        ● {invoice.status}
-      </StatusBadge>
+      <InvoiceAmount $isDark={isDark}>{invoice.amount}</InvoiceAmount>
+      <StatusBadge $status={invoice.status}>● {invoice.status}</StatusBadge>
       <ActionButton>›</ActionButton>
     </InvoiceRowContainer>
-  )
+  );
 }
 
 export default InvoiceRow
 
-const InvoiceId = styled.div`
+const InvoiceId = styled.div<{ $isDark: boolean }>`
   font-weight: 700;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
   font-size: 14px;
-`
+`;
+
+const InvoiceAmount = styled.div<{ $isDark: boolean }>`
+  font-weight: 700;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
+  font-size: 14px;
+`;
 
 const InvoiceDate = styled.div`
   font-size: 13px;
@@ -43,12 +51,6 @@ const InvoiceDate = styled.div`
 const InvoiceCustomer = styled.div`
   font-size: 13px;
   color: #6b7280;
-`
-
-const InvoiceAmount = styled.div`
-  font-weight: 700;
-  color: #1f2937;
-  font-size: 14px;
 `
 
 const ActionButton = styled.button`
@@ -71,20 +73,21 @@ const ActionButton = styled.button`
   }
 `
 
-const InvoiceRowContainer = styled.div`
+const InvoiceRowContainer = styled.div<{ $isDark: boolean }>`
   display: grid;
   grid-template-columns: 1fr 1.2fr 1.2fr 1fr 1.2fr auto;
   gap: 10px;
   align-items: center;
   padding: 16px 32px;
-  background-color: white;
+  background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
+  cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    border-color: #d1d5db;
+    border-color: ${p => p.$isDark ? colors.mainPurple : '#d1d5db'};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   }
 

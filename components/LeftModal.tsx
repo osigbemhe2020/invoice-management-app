@@ -3,6 +3,8 @@ import Portal from './portal';
 import styled from 'styled-components';
 import device from '@/lib/constants/breakpoints';
 import Image from 'next/image';
+import { useTheme } from '@/lib/context/ThemeContext';
+import colors from '@/lib/constants/colors';
 
 interface LeftModalProps {
   toggleModal: () => void;
@@ -25,6 +27,8 @@ const LeftModal: React.FC<LeftModalProps> = ({
   isOpen,
   showClose,
 }) => {
+  const { isDark } = useTheme();
+  
   return (
     <Portal>
       <Background
@@ -33,6 +37,7 @@ const LeftModal: React.FC<LeftModalProps> = ({
           toggleModal();
         }}
         $isOpen={isOpen}
+        $isDark={isDark}
       >
         <MainContainer
           $bgcolor={bgcolor}
@@ -41,14 +46,16 @@ const LeftModal: React.FC<LeftModalProps> = ({
           $height={height}
           onClick={(e) => e.stopPropagation()}
           $isOpen={isOpen}
+          $isDark={isDark}
         >
           {showClose && (
-            <CloseButton onClick={toggleModal}>
+            <CloseButton onClick={toggleModal} $isDark={isDark}>
               <Image
                 src="/close.svg"
                 alt="cancel button"
                 height="50"
                 width="50"
+                style={{ filter: isDark ? 'brightness(0) invert(1)' : 'none' }}
               />
             </CloseButton>
           )}
@@ -64,6 +71,7 @@ export default React.memo(LeftModal);
 
 interface BackgroundProps {
   $isOpen: boolean;
+  $isDark: boolean;
 }
 
 interface MainContainerProps {
@@ -72,10 +80,11 @@ interface MainContainerProps {
   $width?: string;
   $height?: string;
   $isOpen: boolean;
+  $isDark: boolean;
 }
 
 const Background = styled.div<BackgroundProps>`
-  background-color: rgba(52, 64, 84, 0.7);
+  background-color: ${p => p.$isDark ? 'rgba(30, 33, 57, 0.7)' : 'rgba(52, 64, 84, 0.7)'};
   backdrop-filter: blur(8px);
   width: 100%;
   height: 100%;
@@ -97,7 +106,7 @@ const Background = styled.div<BackgroundProps>`
 
 const MainContainer = styled.div<MainContainerProps>`
   cursor: auto;
-  background-color: ${({ theme, $bgcolor }) => $bgcolor ?? (theme?.color?.white || '#ffffff')};
+  background-color: ${({ $bgcolor, $isDark }) => $bgcolor ?? ($isDark ? colors.darkTheme : '#ffffff')};
   border-radius: ${({ $borderRadius }) => $borderRadius ?? '0'}px;
   width: 719px;
   height: 100%;
@@ -108,9 +117,7 @@ const MainContainer = styled.div<MainContainerProps>`
   border-bottom-right-radius: 25px;
   overflow-y: auto;
   padding-left: 80px;
-  @media (${device.tablet}) {
-    padding-left: 10px;
-  }
+  
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
@@ -120,18 +127,29 @@ const MainContainer = styled.div<MainContainerProps>`
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 
+  @media (${device.mobile}) {
+    width:320px;
+    border: red solid 5px
+  }
+
   @media (${device.tablet}) {
     width: 616px;
     max-height: calc(100% - 80px);
     top: 80px;
     margin-top: 80px;
+    padding-left: 10px;
   }
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled.button<{ $isDark: boolean }>`
   position: absolute;
   top: 1rem;
   right: 1.5rem;
   background-color: transparent;
   border: none;
+  cursor: pointer;
+  
+  img {
+    filter: ${({ $isDark }) => $isDark ? 'brightness(0) invert(1)' : 'none'};
+  }
 `;

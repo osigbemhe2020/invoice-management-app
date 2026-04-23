@@ -1,53 +1,56 @@
-//Sidebar.tsx
-import styled from 'styled-components'
-import Image from 'next/image'
-import colors from '@/lib/constants/colors'
-import device from '@/lib/constants/breakpoints'
+"use client";
+import styled from 'styled-components';
+import Image from 'next/image';
+import colors from '@/lib/constants/colors';
+import device from '@/lib/constants/breakpoints';
+import { useTheme } from '@/lib/context/ThemeContext';
 
 function Sidebar() {
+  const { isDark, toggleTheme } = useTheme();
+
   return (
     <SidebarContainer>
       <SidebarCap>
         <Image
-         src="/appSvgs/Combined Shape.svg"
-         alt="Logo"
-         width={40}
-         height={40}
-         style={{filter: 'brightness(0) invert(1)'}}
+          src="/appSvgs/Combined Shape.svg"
+          alt="Logo"
+          width={40}
+          height={40}
+          style={{ filter: 'brightness(0) invert(1)' }}
         />
-
       </SidebarCap>
-      
 
       <SidebarFooter>
-     
-       <NavItemContainer isAvatar={false}>
-        <NavItem>
-          <Image
-           src="/appSvgs/Path.svg"
-           alt="Logo"
-           width={24}
-           height={24}
-           style={{filter: 'brightness(0.5) sepia(1) hue-rotate(210deg) saturate(2)'}}
-          />
-        </NavItem>
+        {/* Moon/Sun toggle */}
+        <NavItemContainer isAvatar={false}>
+          <NavItem onClick={toggleTheme} title="Toggle dark mode">
+            <Image
+              src="/appSvgs/Path.svg"
+              alt="Toggle theme"
+              width={24}
+              height={24}
+              style={{
+                filter: isDark
+                  ? 'brightness(0) invert(1)'  // white in dark mode
+                  : 'brightness(0.5) sepia(1) hue-rotate(210deg) saturate(2)'
+              }}
+            />
+          </NavItem>
         </NavItemContainer>
-       <NavItemContainer isAvatar>
-       <NavItem isAvatar>
-        <Image
-         src="/paul.jpeg"
-         alt="Logo"
-         width={40}
-         height={40}
-        />
-        </NavItem>
+
+        <NavItemContainer isAvatar>
+          <NavItem isAvatar>
+            <Image src="/paul.jpeg" alt="Avatar" width={40} height={40} />
+          </NavItem>
         </NavItemContainer>
-      </SidebarFooter> 
+      </SidebarFooter>
     </SidebarContainer>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;
+
+// ... all your existing styled components stay the same
 
 const SidebarContainer = styled.aside`
   width: 103px;

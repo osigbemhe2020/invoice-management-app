@@ -5,6 +5,7 @@ import device from '@/lib/constants/breakpoints'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { Invoice, InvoiceItem, BillFrom, BillTo } from '@/types/invoice'
+import { useTheme } from '@/lib/context/ThemeContext'
 
 interface FormValues {
   id: string;
@@ -59,6 +60,8 @@ interface InvoiceFormProps {
 
 // Component
 function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode }: InvoiceFormProps) {
+  const { isDark } = useTheme();
+  
   const initialValues: FormValues = {
     id: invoice.id,
     status: invoice.status,
@@ -85,9 +88,9 @@ function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode
       }}
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <InvoiceForm>
+        <InvoiceForm $isDark={isDark}>
           <FormHeader>
-            <FormTitle>
+            <FormTitle $isDark={isDark}>
               {mode === 'edit' ? `Edit #${values.id}` : `New Invoice`}
             </FormTitle>
           </FormHeader>
@@ -95,27 +98,27 @@ function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode
           <FormContent>
             {/* Bill From Section */}
             <FormSection>
-              <SectionTitle>Bill From</SectionTitle>
+              <SectionTitle $isDark={isDark}>Bill From</SectionTitle>
               <FormGroup>
-                <FormLabel>Street Address</FormLabel>
-                <Field name="billFrom.address" as={FormInput} />
+                <FormLabel $isDark={isDark}>Street Address</FormLabel>
+                <Field name="billFrom.address">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                 <ErrorMessage name="billFrom.address" component={ErrorText} />
               </FormGroup>
 
               <FormRow>
                 <FormGroup>
-                  <FormLabel>City</FormLabel>
-                  <Field name="billFrom.city" as={FormInput} />
+                  <FormLabel $isDark={isDark}>City</FormLabel>
+                  <Field name="billFrom.city">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                   <ErrorMessage name="billFrom.city" component={ErrorText} />
                 </FormGroup>
                 <FormGroup>
-                  <FormLabel>Postal Code</FormLabel>
-                  <Field name="billFrom.postcode" as={FormInput} />
+                  <FormLabel $isDark={isDark}>Postal Code</FormLabel>
+                  <Field name="billFrom.postcode">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                   <ErrorMessage name="billFrom.postcode" component={ErrorText} />
                 </FormGroup>
                 <FormGroup>
-                  <FormLabel>Country</FormLabel>
-                  <Field name="billFrom.country" as={FormInput} />
+                  <FormLabel $isDark={isDark}>Country</FormLabel>
+                  <Field name="billFrom.country">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                   <ErrorMessage name="billFrom.country" component={ErrorText} />
                 </FormGroup>
               </FormRow>
@@ -123,39 +126,39 @@ function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode
 
             {/* Bill To Section */}
             <FormSection>
-              <SectionTitle>Bill To</SectionTitle>
+              <SectionTitle $isDark={isDark}>Bill To</SectionTitle>
               <FormGroup>
-                <FormLabel>Client's Name</FormLabel>
-                <Field name="billTo.name" as={FormInput} />
+                <FormLabel $isDark={isDark}>Client's Name</FormLabel>
+                <Field name="billTo.name">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                 <ErrorMessage name="billTo.name" component={ErrorText} />
               </FormGroup>
 
               <FormGroup>
-                <FormLabel>Client's Email</FormLabel>
-                <Field name="sentTo" type="email" as={FormInput} />
+                <FormLabel $isDark={isDark}>Client's Email</FormLabel>
+                <Field name="sentTo">{({ field }: any) => <FormInput $isDark={isDark} {...field} type="email" />}</Field>
                 <ErrorMessage name="sentTo" component={ErrorText} />
               </FormGroup>
 
               <FormGroup>
-                <FormLabel>Street Address</FormLabel>
-                <Field name="billTo.address" as={FormInput} />
+                <FormLabel $isDark={isDark}>Street Address</FormLabel>
+                <Field name="billTo.address">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                 <ErrorMessage name="billTo.address" component={ErrorText} />
               </FormGroup>
 
               <FormRow>
                 <FormGroup>
-                  <FormLabel>City</FormLabel>
-                  <Field name="billTo.city" as={FormInput} />
+                  <FormLabel $isDark={isDark}>City</FormLabel>
+                  <Field name="billTo.city">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                   <ErrorMessage name="billTo.city" component={ErrorText} />
                 </FormGroup>
                 <FormGroup>
-                  <FormLabel>Postal Code</FormLabel>
-                  <Field name="billTo.postcode" as={FormInput} />
+                  <FormLabel $isDark={isDark}>Postal Code</FormLabel>
+                  <Field name="billTo.postcode">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                   <ErrorMessage name="billTo.postcode" component={ErrorText} />
                 </FormGroup>
                 <FormGroup>
-                  <FormLabel>Country</FormLabel>
-                  <Field name="billTo.country" as={FormInput} />
+                  <FormLabel $isDark={isDark}>Country</FormLabel>
+                  <Field name="billTo.country">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                   <ErrorMessage name="billTo.country" component={ErrorText} />
                 </FormGroup>
               </FormRow>
@@ -165,81 +168,89 @@ function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode
             <FormSection>
               <FormRow>
                 <FormGroup>
-                  <FormLabel>Invoice Date</FormLabel>
-                  <Field name="invoiceDate" type="date" as={FormInput} />
+                  <FormLabel $isDark={isDark}>Invoice Date</FormLabel>
+                  <Field name="invoiceDate" type="date">{({ field }: any) => <FormInput $isDark={isDark} {...field} type="date" />}</Field>
                   <ErrorMessage name="invoiceDate" component={ErrorText} />
                 </FormGroup>
                 <FormGroup>
-                  <FormLabel>Payment Terms</FormLabel>
-                  <Field name="paymentTerms" as={FormSelect}>
-                    <option value="Net 30 Days">Net 30 Days</option>
-                    <option value="Net 15 Days">Net 15 Days</option>
-                    <option value="Net 60 Days">Net 60 Days</option>
-                  </Field>
+                  <FormLabel $isDark={isDark}>Payment Terms</FormLabel>
+                  <Field name="paymentTerms">{({ field }: any) => (
+                    <FormSelect $isDark={isDark} {...field}>
+                      <option value="Net 30 Days">Net 30 Days</option>
+                      <option value="Net 15 Days">Net 15 Days</option>
+                      <option value="Net 60 Days">Net 60 Days</option>
+                    </FormSelect>
+                  )}</Field>
                   <ErrorMessage name="paymentTerms" component={ErrorText} />
                 </FormGroup>
               </FormRow>
 
               <FormGroup>
-                <FormLabel>Project Description</FormLabel>
-                <Field name="projectDescription" as={FormInput} />
+                <FormLabel $isDark={isDark}>Project Description</FormLabel>
+                <Field name="projectDescription">{({ field }: any) => <FormInput $isDark={isDark} {...field} />}</Field>
                 <ErrorMessage name="projectDescription" component={ErrorText} />
               </FormGroup>
             </FormSection>
 
             {/* Item List Section */}
             <FormSection>
-              <SectionTitle>Item List</SectionTitle>
+              <SectionTitle $isDark={isDark}>Item List</SectionTitle>
               <FieldArray name="items">
                 {({ push, remove }) => (
                   <>
-                    <ItemsTable>
-                      <TableHeader>
+                    <ItemsTable $isDark={isDark}>
+                      <TableHeader $isDark={isDark}>
                         <ColItemName>Item Name</ColItemName>
                         <ColQty>Qty.</ColQty>
                         <ColPrice>Price</ColPrice>
-                        <ColTotal>Total</ColTotal>
+                        <ColTotal $isDark={isDark}>Total</ColTotal>
                         <ColAction></ColAction>
                       </TableHeader>
 
                       {values.items.map((item, index) => (
-                        <TableRow key={index}>
+                        <TableRow key={index} $isDark={isDark}>
                           <ColItemName>
-                            <Field
-                              name={`items.${index}.name`}
-                              as={FormInputSmall}
-                              placeholder="Item name"
-                            />
+                            <Field name={`items.${index}.name`}>
+                              {({ field }: any) => <FormInputSmall $isDark={isDark} {...field} placeholder="Item name" />}
+                            </Field>
                             <ErrorMessage name={`items.${index}.name`} component={ErrorText} />
                           </ColItemName>
                           <ColQty>
-                            <Field
-                              name={`items.${index}.qty`}
-                              type="number"
-                              as={FormInputSmall}
-                              min="1"
-                              onChange={(e: any) => {
-                                const newQty = parseInt(e.target.value) || 0;
-                                setFieldValue(`items.${index}.qty`, newQty);
-                              }}
-                            />
+                            <Field name={`items.${index}.qty`}>
+                              {({ field }: any) => (
+                                <FormInputSmall 
+                                  $isDark={isDark} 
+                                  {...field} 
+                                  type="number" 
+                                  min="1"
+                                  onChange={(e: any) => {
+                                    const newQty = parseInt(e.target.value) || 0;
+                                    setFieldValue(`items.${index}.qty`, newQty);
+                                  }}
+                                />
+                              )}
+                            </Field>
                             <ErrorMessage name={`items.${index}.qty`} component={ErrorText} />
                           </ColQty>
                           <ColPrice>
-                            <Field
-                              name={`items.${index}.price`}
-                              type="number"
-                              as={FormInputSmall}
-                              min="0"
-                              step="0.01"
-                              onChange={(e: any) => {
-                                const newPrice = parseFloat(e.target.value) || 0;
-                                setFieldValue(`items.${index}.price`, newPrice);
-                              }}
-                            />
+                            <Field name={`items.${index}.price`}>
+                              {({ field }: any) => (
+                                <FormInputSmall 
+                                  $isDark={isDark} 
+                                  {...field} 
+                                  type="number" 
+                                  min="0"
+                                  step="0.01"
+                                  onChange={(e: any) => {
+                                    const newPrice = parseFloat(e.target.value) || 0;
+                                    setFieldValue(`items.${index}.price`, newPrice);
+                                  }}
+                                />
+                              )}
+                            </Field>
                             <ErrorMessage name={`items.${index}.price`} component={ErrorText} />
                           </ColPrice>
-                          <ColTotal>£ {(item.qty * item.price).toFixed(2)}</ColTotal>
+                          <ColTotal $isDark={isDark}>£ {(item.qty * item.price).toFixed(2)}</ColTotal>
                           <ColAction>
                             <DeleteButton
                               type="button"
@@ -264,7 +275,7 @@ function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode
             </FormSection>
           </FormContent>
 
-          <FormActions>
+          <FormActions $isDark={isDark}>
             <div>
             <Button type="button" variant="cancel" onClick={onCancel}>
               Discard
@@ -287,14 +298,14 @@ function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode
 
 export default InvoiceFormComponent
 
-const InvoiceForm = styled(Form)`
+const InvoiceForm = styled(Form)<{ $isDark: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   padding: 0px;
   max-width: 600px;
-  background: white;
+  background: ${p => p.$isDark ? colors.darkTheme : 'white'};
 
   @media (${device.tablet}) {
     max-width: 100%;
@@ -312,12 +323,12 @@ const FormHeader = styled.div`
   gap: 12px;
 `
 
-const FormTitle = styled.h2`
+const FormTitle = styled.h2<{ $isDark: boolean }>`
   font-size: 24px;
   line-height: 33px;
   letter-spacing: -0.5px;
   font-weight: 600;
-  color: ${colors.blueBlack};
+  color: ${p => p.$isDark ? 'white' : colors.blueBlack};
   margin: 0;
 `
 
@@ -342,12 +353,12 @@ const FormSection = styled.div`
   }
 `
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.h3<{ $isDark: boolean }>`
   font-size: 13px;
   font-weight: 600;
-  color: #7c3aed;
+  color: ${p => p.$isDark ? colors.mainPurple : '#7c3aed'};
+  margin-bottom: 16px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   margin: 0 0 16px 0;
 `
 
@@ -355,34 +366,35 @@ const FormGroup = styled.div`
   margin-bottom: 16px;
 `
 
-const FormLabel = styled.label`
+const FormLabel = styled.label<{ $isDark: boolean }>`
   display: block;
   font-size: 12px;
   font-weight: 500;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   text-transform: capitalize;
   margin-bottom: 6px;
 `
 
-const FormInput = styled.input`
+const FormInput = styled.input<{ $isDark: boolean }>`
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#d1d5db'};
   border-radius: 4px;
   font-size: 14px;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
+  background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
   font-family: inherit;
   transition: all 0.2s ease;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: ${colors.mainPurple};
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
   }
 
   &::placeholder {
-    color: #d1d5db;
+    color: ${p => p.$isDark ? colors.ourSlate : '#d1d5db'};
   }
 `
 
@@ -391,21 +403,27 @@ const FormInputSmall = styled(FormInput)`
   padding: 8px 10px;
 `
 
-const FormSelect = styled.select`
+const FormSelect = styled.select<{ $isDark: boolean }>`
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#d1d5db'};
   border-radius: 4px;
   font-size: 14px;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
+  background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
   font-family: inherit;
   transition: all 0.2s ease;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: ${colors.mainPurple};
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+
+  option {
+    color: ${p => p.$isDark ? 'white' : '#1f2937'};
+    background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
   }
 `
 
@@ -416,20 +434,20 @@ const FormRow = styled.div`
 
 `
 
-const ItemsTable = styled.div`
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+const ItemsTable = styled.div<{ $isDark: boolean }>`
+  background: ${p => p.$isDark ? colors.darkThemeLight : '#f9fafb'};
+  border: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
   border-radius: 4px;
   margin-bottom: 12px;
 `
 
-const TableHeader = styled.div`
+const TableHeader = styled.div<{ $isDark: boolean }>`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 40px;
   gap: 12px;
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f3f4f6;
+  border-bottom: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
+  background: ${p => p.$isDark ? colors.darkTheme : '#f3f4f6'};
   border-radius: 4px 4px 0 0;
 
   @media (max-width: 768px) {
@@ -444,19 +462,19 @@ const TableHeader = styled.div`
   & > div {
     font-size: 12px;
     font-weight: 600;
-    color: #6b7280;
+    color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
 `
 
-const TableRow = styled.div`
+const TableRow = styled.div<{ $isDark: boolean }>`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 40px;
   gap: 12px;
   padding: 12px;
   align-items: center;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
 
   &:last-child {
     border-bottom: none;
@@ -484,11 +502,11 @@ const ColPrice = styled.div`
   grid-column: 3;
 `
 
-const ColTotal = styled.div`
+const ColTotal = styled.div<{ $isDark: boolean }>`
   grid-column: 4;
   font-size: 13px;
   font-weight: 500;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
 `
 
 const ColAction = styled.div`
@@ -529,10 +547,10 @@ const AddItemButton = styled.button`
   }
 `
 
-const FormActions = styled.div`
+const FormActions = styled.div<{ $isDark: boolean }>`
   display: flex;
   padding: 16px 24px;
-  background: #f9fafb;
+  background: ${p => p.$isDark ? colors.darkTheme : '#f9fafb'};
   border-radius: 0 0 8px 8px;
   justify-content: space-between;
 `

@@ -7,6 +7,8 @@ import { getInvoices, addInvoice } from '@/lib/localStorage'
 import colors from '@/lib/constants/colors'
 import styled from 'styled-components'
 import { Invoice, InvoiceItem } from '@/types/invoice'
+import device from '@/lib/constants/breakpoints'
+import { useTheme } from '@/lib/context/ThemeContext'
 
 import LeftModal from '@/components/LeftModal'
 import InvoiceForm from '@/components/InvoiceForm'
@@ -15,8 +17,23 @@ import EmptyState from '@/components/EmptyState';
 function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  const { isDark } = useTheme();
 
   const count = invoices.length
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Load invoices from localStorage on mount
   useEffect(() => {
@@ -44,7 +61,7 @@ function Page() {
   // Generate random invoice ID
   const generateInvoiceId = (): string => {
     const randomNum = Math.floor(Math.random() * 100000)
-    const randomLetters = Math.random().toString(36).substring(2, 6).toUpperCase()
+    const randomLetters = Math.random().toString(36).substring(2, 4).toUpperCase()
     return `${randomLetters}${randomNum}`
   }
 
@@ -109,21 +126,21 @@ function Page() {
   }
 
   return (
-    <MainContent>
+    <MainContent $isDark={isDark}>
       <HeaderSection>
         <HeaderText>
           <h1>Invoices</h1>
           <p>There are {count} total invoices</p>
         </HeaderText>
         <HeaderControls>
-          <FilterSelect>
-            <option value="">Filter by status</option>
+          <FilterSelect $isDark={isDark}>
+            <option value="">{isMobile ? 'Filter' : 'Filter by status'}</option>
             <option value="paid">Paid</option>
             <option value="pending">Pending</option>
           </FilterSelect>
-          <NewInvoiceBtn onClick={toggleModal}>
-            <PlusIcon>+</PlusIcon>
-            New Invoice
+          <NewInvoiceBtn onClick={toggleModal} $isDark={isDark}>
+            <PlusIcon $isDark={isDark}>+</PlusIcon>
+            {isMobile ? 'New' : 'New Invoice'}
           </NewInvoiceBtn>
         </HeaderControls>
       </HeaderSection>
@@ -152,7 +169,7 @@ function Page() {
 
 export default Page
 
-const MainContent = styled.main`
+const MainContent = styled.main<{ $isDark: boolean }>`
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -162,7 +179,14 @@ const MainContent = styled.main`
   max-width: 730px;
   margin-left: auto;
   margin-right: auto;
-`
+  
+  h1 {
+    color: ${p => p.$isDark ? 'white' : colors.blueBlack};
+  }
+  p {
+    color: ${p => p.$isDark ? colors.ourSlate : colors.ourSlate};
+  }
+`;
 
 const HeaderSection = styled.div`
   display: flex;
@@ -175,6 +199,10 @@ const HeaderText = styled.div`
   h1 {
     margin-bottom: 6px;
   }
+  
+  p {
+    color: ${colors.ourSlate};
+  }
 `
 
 const HeaderControls = styled.div`
@@ -183,34 +211,13 @@ const HeaderControls = styled.div`
   align-items: center;
 `
 
-const FilterSelect = styled.select`
-  background-color: transparent;
-  border: none;
-  font-size: 14px;
-  color: #1f2937;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-league-spartan), Arial, Helvetica, sans-serif;
-
-  &:focus {
-    outline: none;
-  }
-
-  option {
-    color: #1f2937;
-    background-color: white;
-  }
-`
 
 // const DropdownArrow = styled.span`
 //   color: #6b7280;
 //   font-size: 20px;
 // `
 
-const NewInvoiceBtn = styled.button`
+const NewInvoiceBtn = styled.button<{ $isDark: boolean }>`
   width: 150px;
   height: 40px;
   padding:8px;
@@ -225,19 +232,23 @@ const NewInvoiceBtn = styled.button`
   align-items: center;
   gap: 16px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  box-shadow: ${p => p.$isDark ? '0 4px 12px rgba(124, 58, 237, 0.5)' : '0 4px 12px rgba(124, 58, 237, 0.3)'};
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+    box-shadow: ${p => p.$isDark ? '0 6px 16px rgba(124, 58, 237, 0.6)' : '0 6px 16px rgba(124, 58, 237, 0.4)'};
     background: ${colors.lightPurple};
+  }
+
+  @media (${device.mobile}) {
+    width: 90px;
   }
 `
 
-const PlusIcon = styled.span`
+const PlusIcon = styled.span<{ $isDark: boolean }>`
   font-size: 18px;
   font-weight: bold;
-  background: white;
+  background: ${p => p.$isDark ? colors.darkTheme : 'white'};
   color: ${colors.mainPurple};
   border-radius: 50%;
   width: 24px;
@@ -247,5 +258,34 @@ const PlusIcon = styled.span`
   justify-content: center;
   &:hover{
    color: ${colors.lightPurple}
+  }
+`
+
+
+const FilterSelect = styled.select<{ $isDark: boolean }>`
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-league-spartan), Arial, Helvetica, sans-serif;
+
+  &:focus {
+    outline: none;
+  }
+
+  option {
+    color: ${p => p.$isDark ? 'white' : '#1f2937'};
+    background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
+  }
+
+  @media (${device.tablet}) {
+    option[value=""]::after {
+      content: "Filter";
+    }
   }
 `

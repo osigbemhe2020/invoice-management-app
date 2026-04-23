@@ -1,12 +1,12 @@
-'use client';
 
-import { ThemeProvider as SCThemeProvider } from 'styled-components';
-import { theme } from '@/styles/theme';
+"use client";
+import { ThemeContextProvider } from '@/lib/context/ThemeContext';
+import { ReactNode } from 'react';
 
-interface ThemeProviderProps {
-  children: React.ReactNode;
-}
-
-export default function ThemeProvider({ children }: ThemeProviderProps) {
-  return <SCThemeProvider theme={theme}>{children}</SCThemeProvider>;
+export default function ThemeProvider({ children }: { children: ReactNode }) {
+  return (
+    <ThemeContextProvider>
+      {children}
+    </ThemeContextProvider>
+  );
 }

@@ -8,6 +8,7 @@ import device from '@/lib/constants/breakpoints'
 import LeftModal from './LeftModal'
 import InvoiceForm from './InvoiceForm'
 import CenterModal from './CenterModal';
+import { useTheme } from '@/lib/context/ThemeContext';
 
 // Styled Components
 
@@ -16,6 +17,7 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
   const router = useRouter()
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const { isDark } = useTheme();
 
   const handleGoBack = () => {
     router.push('/')
@@ -63,37 +65,37 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
   }
 
   return (
-    <InvoiceDetailContainer>
+    <InvoiceDetailContainer $isDark={isDark}>
       {/* Go Back Section */}
-      <GoBackButton onClick={handleGoBack}>
-        <BackArrow>‹</BackArrow>
+      <GoBackButton onClick={handleGoBack} $isDark={isDark}>
+        <BackArrow $isDark={isDark}>‹</BackArrow>
         <BackText>Go back</BackText>
       </GoBackButton>
 
       {/* Top Controls Section */}
-      <InvoiceControls>
+      <InvoiceControls $isDark={isDark}>
         <StatusSection>
-          <StatusLabel>Status</StatusLabel>
+          <StatusLabel $isDark={isDark}>Status</StatusLabel>
           <StatusBadge $status={invoice.status}>
             ● {invoice.status}
           </StatusBadge>
         </StatusSection>
         <ActionButtons>
-          <Button $variant="edit" onClick={handleEdit}>Edit</Button>
-          <Button $variant="delete" onClick={handleDelete}>Delete</Button>
-          <Button $variant="paid" onClick={handleMarkAsPaid}>Mark as Paid</Button>
+          <Button $variant="edit" onClick={handleEdit} $isDark={isDark}>Edit</Button>
+          <Button $variant="delete" onClick={handleDelete} $isDark={isDark}>Delete</Button>
+          <Button $variant="paid" onClick={handleMarkAsPaid} $isDark={isDark}>Mark as Paid</Button>
         </ActionButtons>
       </InvoiceControls>
 
       {/* Invoice Details Container */}
-      <InvoiceBox>
+      <InvoiceBox $isDark={isDark}>
         {/* Header with ID and Company */}
-        <InvoiceHeader>
+        <InvoiceHeader $isDark={isDark}>
           <div>
-            <InvoiceId>{invoice.id}</InvoiceId>
-            <CompanyName>{invoice.companyName}</CompanyName>
+            <InvoiceId $isDark={isDark}>{invoice.id}</InvoiceId>
+            <CompanyName $isDark={isDark}>{invoice.companyName}</CompanyName>
           </div>
-          <CompanyAddress>
+          <CompanyAddress $isDark={isDark}>
             <p>{invoice.from.address}</p>
             <p>{invoice.from.city}</p>
             <p>{invoice.from.postcode}</p>
@@ -102,48 +104,48 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
         </InvoiceHeader>
 
         {/* Dates and Client Info Grid */}
-        <InvoiceGrid>
+        <InvoiceGrid $isDark={isDark}>
           {/* Invoice Date */}
           <GridItem>
-            <GridLabel>Invoice Date</GridLabel>
-            <GridValue>{invoice.paymentDue}</GridValue>
+            <GridLabel $isDark={isDark}>Invoice Date</GridLabel>
+            <GridValue $isDark={isDark}>{invoice.paymentDue}</GridValue>
           </GridItem>
 
           {/* Payment Due */}
           <GridItem>
-            <GridLabel>Payment Due</GridLabel>
-            <GridValue>3000</GridValue>
+            <GridLabel $isDark={isDark}>Payment Due</GridLabel>
+            <GridValue $isDark={isDark}>3000</GridValue>
           </GridItem>
 
           {/* Bill To */}
           <GridItem>
-            <GridLabel>Bill To</GridLabel>
-            <GridValue>{invoice.billTo.name}</GridValue>
-            <GridSubtext>{invoice.billTo.address}</GridSubtext>
-            <GridSubtext>{invoice.billTo.city}</GridSubtext>
-            <GridSubtext>{invoice.billTo.postcode}</GridSubtext>
-            <GridSubtext>{invoice.billTo.country}</GridSubtext>
+            <GridLabel $isDark={isDark}>Bill To</GridLabel>
+            <GridValue $isDark={isDark}>{invoice.billTo.name}</GridValue>
+            <GridSubtext $isDark={isDark}>{invoice.billTo.address}</GridSubtext>
+            <GridSubtext $isDark={isDark}>{invoice.billTo.city}</GridSubtext>
+            <GridSubtext $isDark={isDark}>{invoice.billTo.postcode}</GridSubtext>
+            <GridSubtext $isDark={isDark}>{invoice.billTo.country}</GridSubtext>
           </GridItem>
 
           {/* Sent To */}
           <GridItem>
-            <GridLabel>Sent To</GridLabel>
-            <GridValue>{invoice.sentTo}</GridValue>
+            <GridLabel $isDark={isDark}>Sent To</GridLabel>
+            <GridValue $isDark={isDark}>{invoice.sentTo}</GridValue>
           </GridItem>
         </InvoiceGrid>
 
         {/* Items Table */}
-        <ItemsTable>
-          <TableHeader>
+        <ItemsTable $isDark={isDark}>
+          <TableHeader $isDark={isDark}>
             <ColItem>Item Name</ColItem>
             <ColQty>QTY.</ColQty>
             <ColPrice>Price</ColPrice>
             <ColTotal>Total</ColTotal>
           </TableHeader>
 
-          <TableBody>
+          <TableBody $isDark={isDark}>
             {invoice.items.map((item, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} $isDark={isDark}>
                 <ColItem>{item.name}</ColItem>
                 <ColQty>{item.qty}</ColQty>
                 <ColPrice>£ {item.price.toFixed(2)}</ColPrice>
@@ -153,7 +155,7 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
           </TableBody>
 
           {/* Amount Due Footer */}
-          <AmountDue>
+          <AmountDue $isDark={isDark}>
             <AmountLabel>Amount Due</AmountLabel>
             <AmountValue>£ {(invoice.amountDue || 0).toFixed(2)}</AmountValue>
           </AmountDue>
@@ -184,13 +186,13 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
         <CenterModal 
           toggleModal={handleCancel}
         >
-          <DeleteModalContent>
-            <DeleteModalTitle>Delete Confirmation</DeleteModalTitle>
-            <DeleteModalText>
+          <DeleteModalContent $isDark={isDark}>
+            <DeleteModalTitle $isDark={isDark}>Delete Confirmation</DeleteModalTitle>
+            <DeleteModalText $isDark={isDark}>
               Are you sure you want to delete invoice #{invoice.id}? This action cannot be undone.
             </DeleteModalText>
             <DeleteModalButtons>
-              <CancelButton onClick={handleCancel}>Cancel</CancelButton>
+              <CancelButton onClick={handleCancel} $isDark={isDark}>Cancel</CancelButton>
               <DeleteButton onClick={handleDeleteConfirm}>Delete</DeleteButton>
             </DeleteModalButtons>
           </DeleteModalContent>
@@ -200,7 +202,7 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
   )
 }
 
-const InvoiceDetailContainer = styled.div`
+const InvoiceDetailContainer = styled.div<{ $isDark: boolean }>`
   width: 100%;
   flex: 1;
   display: flex;
@@ -212,7 +214,7 @@ const InvoiceDetailContainer = styled.div`
   padding: 15px 0;
 `
 
-const GoBackButton = styled.button`
+const GoBackButton = styled.button<{ $isDark: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -220,14 +222,14 @@ const GoBackButton = styled.button`
   cursor: pointer;
   background: none;
   border: none;
-  color: ${colors.blueBlack};
+  color: ${p => p.$isDark ? 'white' : colors.blueBlack};
   font-size: 14px;
   font-weight: 700;
 `
 
-const BackArrow = styled.span`
+const BackArrow = styled.span<{ $isDark: boolean }>`
   font-size: 20px;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   font-weight: 600;
 `
 
@@ -236,13 +238,13 @@ const BackText = styled.span`
   color: inherit;
 `
 
-const InvoiceControls = styled.div`
+const InvoiceControls = styled.div<{ $isDark: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
   padding: 20px 32px;
-  background-color: white;
+  background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
 
 `
 
@@ -252,8 +254,8 @@ const StatusSection = styled.div`
   gap: 20px;
 `
 
-const StatusLabel = styled.span`
-  color: ${colors.ourSlate};
+const StatusLabel = styled.span<{ $isDark: boolean }>`
+  color: ${p => p.$isDark ? colors.ourSlate : colors.ourSlate};
   font-size: 13px;
   font-weight: 500;
 `
@@ -301,8 +303,8 @@ const ActionButtons = styled.div`
 `
 
 
-const DeleteModalContent = styled.div`
-  background: white;
+const DeleteModalContent = styled.div<{ $isDark: boolean }>`
+  background: ${p => p.$isDark ? colors.darkTheme : 'white'};
   border-radius: 8px;
   padding: 32px;
   max-width: 400px;
@@ -310,16 +312,16 @@ const DeleteModalContent = styled.div`
   text-align: center;
 `
 
-const DeleteModalTitle = styled.h2`
+const DeleteModalTitle = styled.h2<{ $isDark: boolean }>`
   margin-bottom: 16px;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
   font-size: 20px;
   font-weight: 700;
 `
 
-const DeleteModalText = styled.p`
+const DeleteModalText = styled.p<{ $isDark: boolean }>`
   margin-bottom: 24px;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   line-height: 1.5;
 `
 
@@ -329,19 +331,19 @@ const DeleteModalButtons = styled.div`
   justify-content: center;
 `
 
-const CancelButton = styled.button`
+const CancelButton = styled.button<{ $isDark: boolean }>`
   padding: 12px 24px;
   border: none;
   border-radius: 24px;
-  background-color: #e5e7eb;
-  color: #6b7280;
+  background-color: ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #d1d5db;
+    background-color: ${p => p.$isDark ? colors.darkTheme : '#d1d5db'};
   }
 `
 
@@ -361,7 +363,7 @@ const DeleteButton = styled.button`
   }
 `
 
-const Button = styled.button<{ $variant?: 'edit' | 'delete' | 'paid' }>`
+const Button = styled.button<{ $variant?: 'edit' | 'delete' | 'paid', $isDark: boolean }>`
   padding: 14px 24px;
   border: none;
   border-radius: 24px;
@@ -390,48 +392,48 @@ const Button = styled.button<{ $variant?: 'edit' | 'delete' | 'paid' }>`
         `
       default:
         return `
-          background-color: #e5e7eb;
+          background-color: ${props.$isDark ? colors.darkThemeLight : '#e5e7eb'};
           color: ${colors.mediumDarkSlate};
           &:hover {
-            background-color: #e5e7eb;
+            background-color: ${props.$isDark ? colors.darkThemeLight : '#e5e7eb'};
           }
         `
     }
   }}
 `
 
-const InvoiceBox = styled.div`
-  background: white;
+const InvoiceBox = styled.div<{ $isDark: boolean }>`
+  background: ${p => p.$isDark ? colors.darkTheme : 'white'};
   border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: ${p => p.$isDark ? '0 1px 3px rgba(0, 0, 0, 0.3)' : '0 1px 3px rgba(0, 0, 0, 0.1)'};
 `
 
-const InvoiceHeader = styled.div`
+const InvoiceHeader = styled.div<{ $isDark: boolean }>`
   display: flex;
   justify-content: space-between;
   margin-bottom: 32px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
 `
 
-const InvoiceId = styled.p`
+const InvoiceId = styled.p<{ $isDark: boolean }>`
   font-size: 18px;
   font-weight: 700;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
   margin-bottom: 4px;
 `
 
-const CompanyName = styled.p`
+const CompanyName = styled.p<{ $isDark: boolean }>`
   font-size: 13px;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   font-weight: 500;
 `
 
-const CompanyAddress = styled.div`
+const CompanyAddress = styled.div<{ $isDark: boolean }>`
   text-align: right;
   font-size: 12px;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   line-height: 1.6;
 
   p {
@@ -439,13 +441,13 @@ const CompanyAddress = styled.div`
   }
 `
 
-const InvoiceGrid = styled.div`
+const InvoiceGrid = styled.div<{ $isDark: boolean }>`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 32px;
   margin-bottom: 32px;
   padding-bottom: 32px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -457,38 +459,38 @@ const GridItem = styled.div`
   flex-direction: column;
 `
 
-const GridLabel = styled.p`
+const GridLabel = styled.p<{ $isDark: boolean }>`
   font-size: 12px;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   font-weight: 600;
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `
 
-const GridValue = styled.p`
+const GridValue = styled.p<{ $isDark: boolean }>`
   font-size: 14px;
-  color: #1f2937;
+  color: ${p => p.$isDark ? 'white' : '#1f2937'};
   font-weight: 600;
   margin-bottom: 4px;
 `
 
-const GridSubtext = styled.p`
+const GridSubtext = styled.p<{ $isDark: boolean }>`
   font-size: 12px;
-  color: #6b7280;
+  color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
   line-height: 1.5;
 `
 
-const ItemsTable = styled.div`
+const ItemsTable = styled.div<{ $isDark: boolean }>`
   margin-top: 32px;
 `
 
-const TableHeader = styled.div`
+const TableHeader = styled.div<{ $isDark: boolean }>`
   display: grid;
   grid-template-columns: 2fr 0.5fr 1fr 1fr;
   gap: 16px;
   padding: 12px 0;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid ${p => p.$isDark ? colors.darkThemeLight : '#e5e7eb'};
   margin-bottom: 12px;
 
   @media (max-width: 768px) {
@@ -497,7 +499,7 @@ const TableHeader = styled.div`
 
   div {
     font-size: 12px;
-    color: #6b7280;
+    color: ${p => p.$isDark ? colors.ourSlate : '#6b7280'};
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -528,19 +530,19 @@ const ColTotal = styled.div`
   text-align: right;
 `
 
-const TableBody = styled.div`
+const TableBody = styled.div<{ $isDark: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
 `
 
-const TableRow = styled.div`
+const TableRow = styled.div<{ $isDark: boolean }>`
   display: grid;
   grid-template-columns: 2fr 0.5fr 1fr 1fr;
   gap: 16px;
   padding: 12px 0;
   align-items: center;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid ${p => p.$isDark ? colors.darkThemeLight : '#f3f4f6'};
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr 1fr;
@@ -548,13 +550,13 @@ const TableRow = styled.div`
 
   ${ColItem} {
     font-size: 14px;
-    color: #1f2937;
+    color: ${p => p.$isDark ? 'white' : '#1f2937'};
     font-weight: 500;
   }
 
   ${ColQty} {
     font-size: 14px;
-    color: #1f2937;
+    color: ${p => p.$isDark ? 'white' : '#1f2937'};
     text-align: center;
 
     @media (max-width: 768px) {
@@ -564,7 +566,7 @@ const TableRow = styled.div`
 
   ${ColPrice} {
     font-size: 14px;
-    color: #1f2937;
+    color: ${p => p.$isDark ? 'white' : '#1f2937'};
     text-align: right;
 
     @media (max-width: 768px) {
@@ -574,19 +576,19 @@ const TableRow = styled.div`
 
   ${ColTotal} {
     font-size: 14px;
-    color: #1f2937;
+    color: ${p => p.$isDark ? 'white' : '#1f2937'};
     font-weight: 600;
     text-align: right;
   }
 `
 
-const AmountDue = styled.div`
+const AmountDue = styled.div<{ $isDark: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
   margin-top: 24px;
-  background-color: #2d3748;
+  background-color: ${p => p.$isDark ? colors.darkNavy : '#2d3748'};
   border-radius: 8px;
   color: white;
 `
