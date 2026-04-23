@@ -18,6 +18,7 @@ function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [isMobile, setIsMobile] = useState(false)
+  const [filterStatus, setFilterStatus] = useState<string>('')
 
   const { isDark } = useTheme();
 
@@ -133,10 +134,11 @@ function Page() {
           <p>There are {count} total invoices</p>
         </HeaderText>
         <HeaderControls>
-          <FilterSelect $isDark={isDark}>
+          <FilterSelect $isDark={isDark} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
             <option value="">{isMobile ? 'Filter' : 'Filter by status'}</option>
-            <option value="paid">Paid</option>
-            <option value="pending">Pending</option>
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+            <option value="Draft">Draft</option>
           </FilterSelect>
           <NewInvoiceBtn onClick={toggleModal} $isDark={isDark}>
             <PlusIcon $isDark={isDark}>+</PlusIcon>
@@ -145,7 +147,7 @@ function Page() {
         </HeaderControls>
       </HeaderSection>
       {count > 0 ? (
-        <InvoiceList invoices={invoices} />
+        <InvoiceList invoices={invoices} filterStatus={filterStatus} />
       ) : (
         <EmptyState />
       )}

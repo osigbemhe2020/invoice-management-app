@@ -4,10 +4,14 @@ import InvoiceRow from './InvoiceRow'
 import styled from 'styled-components'
 import { Invoice } from '@/types/invoice'
 
-function InvoiceList({ invoices }: { invoices: Invoice[] }) {
+function InvoiceList({ invoices, filterStatus }: { invoices: Invoice[], filterStatus?: string }) {
+  const filteredInvoices = filterStatus
+    ? invoices.filter(invoice => invoice.status === filterStatus)
+    : invoices
+
   return (
     <InvoiceListContainer>
-      {invoices.map((invoice) => (
+      {filteredInvoices.map((invoice) => (
         <InvoiceRow key={invoice.id} invoice={invoice} />
       ))}
     </InvoiceListContainer>
