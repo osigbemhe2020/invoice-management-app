@@ -81,7 +81,7 @@ const ModalContent = styled.div<{
   $height?: string | number;
   $overflow?: 'auto' | 'hidden' | 'scroll' | 'visible';
 }>`
-  background: ${colors.white};
+  background: white;
   border-radius: 0.75rem;
   padding: 32px;
   width: ${({ $width }) => $width ?? 'auto'};
