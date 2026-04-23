@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { League_Spartan } from "next/font/google";
 import "./globals.css";
+import StyledComponentsRegistry from '@/lib/registry'
 import Sidebar from "@/components/Sidebar";
 import ThemeProvider from "@/components/ThemeProvider";
 import AppShell from "@/components/AppShell";
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={leagueSpartan.variable}>
       <body>
+         <StyledComponentsRegistry>
         <ThemeProvider>
           <AppShell>
             <Sidebar />
@@ -27,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div id="portal" />
           </AppShell>
         </ThemeProvider>
+      </StyledComponentsRegistry>
       </body>
     </html>
   );
