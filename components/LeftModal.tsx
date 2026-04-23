@@ -128,11 +128,16 @@ const MainContainer = styled.div<MainContainerProps>`
   scrollbar-width: none; /* Firefox */
 
   @media (${device.mobile}) {
-    width:320px;
-    border: red solid 5px
+    width: 100%;
+    max-height: calc(100% - 72px);
+    margin-top: 72px;
+    padding-left: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0;
   }
 
-  @media (${device.tablet}) {
+  @media (min-width: 769px) and (${device.tablet}) {
     width: 616px;
     max-height: calc(100% - 80px);
     top: 80px;

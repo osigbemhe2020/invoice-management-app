@@ -157,7 +157,7 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
           {/* Amount Due Footer */}
           <AmountDue $isDark={isDark}>
             <AmountLabel>Amount Due</AmountLabel>
-            <AmountValue>£ {(invoice.amountDue || 0).toFixed(2)}</AmountValue>
+            <AmountValue>£ {(invoice.items.reduce((sum, item) => sum + item.total, 0)).toFixed(2)}</AmountValue>
           </AmountDue>
         </ItemsTable>
       </InvoiceBox>
@@ -198,6 +198,11 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
           </DeleteModalContent>
         </CenterModal>
       )}
+      <MobileActions $isDark={isDark}>
+      <Button $variant="edit" onClick={handleEdit} $isDark={isDark}>Edit</Button>
+      <Button $variant="delete" onClick={handleDelete} $isDark={isDark}>Delete</Button>
+      <Button $variant="paid" onClick={handleMarkAsPaid} $isDark={isDark}>Mark as Paid</Button>
+    </MobileActions>
     </InvoiceDetailContainer>
   )
 }
@@ -238,15 +243,7 @@ const BackText = styled.span`
   color: inherit;
 `
 
-const InvoiceControls = styled.div<{ $isDark: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-  padding: 20px 32px;
-  background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
 
-`
 
 const StatusSection = styled.div`
   display: flex;
@@ -300,6 +297,26 @@ export const StatusBadge = styled.span<{ $status: string }>`
 const ActionButtons = styled.div`
   display: flex;
   gap: 8px;
+`
+
+const InvoiceControls = styled.div<{ $isDark: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 20px 32px;
+  background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
+
+  @media (${device.mobile}) {
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 20px;
+    
+    ${ActionButtons} {
+      display: none;  /* hide from top on mobile */
+    }
+  }
+
 `
 
 
@@ -407,6 +424,9 @@ const InvoiceBox = styled.div<{ $isDark: boolean }>`
   border-radius: 12px;
   padding: 40px;
   box-shadow: ${p => p.$isDark ? '0 1px 3px rgba(0, 0, 0, 0.3)' : '0 1px 3px rgba(0, 0, 0, 0.1)'};
+  @media (${device.mobile}) {
+    padding: 20px;
+  }
 `
 
 const InvoiceHeader = styled.div<{ $isDark: boolean }>`
@@ -602,3 +622,19 @@ const AmountValue = styled.span`
   font-size: 28px;
   font-weight: 700;
 `
+const MobileActions = styled.div<{ $isDark: boolean }>`
+  display: none;
+
+  @media (${device.mobile}) {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px;
+    background-color: ${p => p.$isDark ? colors.darkTheme : 'white'};
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    justify-content: center;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+    margin-top: auto;
+  }
+`;

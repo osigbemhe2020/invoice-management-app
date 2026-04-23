@@ -91,42 +91,20 @@ const InvoiceRowContainer = styled.div<{ $isDark: boolean }>`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   }
 
-  @media (${device.tablet}) {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 8px;
-    padding: 12px 20px;
+  @media (${device.mobile}) {
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "id    customer"
+    "date  date"
+    "amount status";
+  gap: 8px;
+  padding: 16px 20px;
 
-    ${ActionButton} {
-      display: none;
-    }
-
-    ${InvoiceId} {
-      grid-column: 1;
-      grid-row: 1;
-    }
-
-    ${InvoiceDate} {
-      grid-column: 2;
-      grid-row: 1;
-      text-align: right;
-    }
-
-    ${InvoiceCustomer} {
-      grid-column: 1;
-      grid-row: 2;
-    }
-
-    ${InvoiceAmount} {
-      grid-column: 1;
-      grid-row: 3;
-    }
-
-    ${StatusBadge} {
-      grid-column: 2;
-      grid-row: 3;
-      text-align: right;
-      justify-self: flex-end;
-    }
-  }
+  ${InvoiceId}     { grid-area: id; }
+  ${InvoiceCustomer} { grid-area: customer; text-align: right; }
+  ${InvoiceDate}   { grid-area: date; }
+  ${InvoiceAmount} { grid-area: amount; align-self: end; }
+  ${StatusBadge}   { grid-area: status; justify-self: end; }
+  ${ActionButton}  { display: none; }
+}
 `

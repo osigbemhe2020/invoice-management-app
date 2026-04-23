@@ -60,9 +60,9 @@ function Page() {
 
   // Generate random invoice ID
   const generateInvoiceId = (): string => {
-    const randomNum = Math.floor(Math.random() * 100000)
+    const randomNum = Math.floor(Math.random() * 100)
     const randomLetters = Math.random().toString(36).substring(2, 4).toUpperCase()
-    return `${randomLetters}${randomNum}`
+    return `${randomLetters}${randomNum.toString().padStart(2, '0')}`
   }
 
   // Calculate payment due date based on payment terms
@@ -184,6 +184,8 @@ const MainContent = styled.main<{ $isDark: boolean }>`
   h1 { color: ${p => p.$isDark ? 'white' : colors.blueBlack}; }
   p  { color: ${p => p.$isDark ? colors.ourSlate : colors.ourSlate}; }
 
+  
+
   @media (${device.tablet}) {
     padding: 24px 20px;
     margin-top: 0;       /* ✅ sidebar is now on top, not side */
@@ -196,6 +198,10 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 64px;
+
+  @media (${device.mobile}) {
+    margin-bottom: 32px;
+  }
 `
 
 const HeaderText = styled.div`
