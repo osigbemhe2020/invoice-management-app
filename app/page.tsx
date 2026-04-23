@@ -179,12 +179,15 @@ const MainContent = styled.main<{ $isDark: boolean }>`
   max-width: 730px;
   margin-left: auto;
   margin-right: auto;
-  
-  h1 {
-    color: ${p => p.$isDark ? 'white' : colors.blueBlack};
-  }
-  p {
-    color: ${p => p.$isDark ? colors.ourSlate : colors.ourSlate};
+  width: 100%;          /* ✅ add this */
+
+  h1 { color: ${p => p.$isDark ? 'white' : colors.blueBlack}; }
+  p  { color: ${p => p.$isDark ? colors.ourSlate : colors.ourSlate}; }
+
+  @media (${device.tablet}) {
+    padding: 24px 20px;
+    margin-top: 0;       /* ✅ sidebar is now on top, not side */
+    max-width: 100%;     /* ✅ take full width */
   }
 `;
 
