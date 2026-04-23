@@ -1,46 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { use } from "react";  // import `use`
 import InvoiceDetail from "@/components/InvoiceDetail";
-import styled from "styled-components";
 import { getInvoiceById } from "@/lib/localStorage";
 import { Invoice } from "@/types/invoice";
 
+
 type Props = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;  // params is now a Promise
 };
 
-const PageContainer = styled.main`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-`;
-
 export default function InvoicePage({ params }: Props) {
+  const { id } = use(params);  // unwrap with React.use()
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadInvoice = async () => {
-      const { id } = params;
-      const foundInvoice = getInvoiceById(id);
-      setInvoice(foundInvoice);
-      setLoading(false);
-    };
-
-    loadInvoice();
-  }, [params]);
+    const foundInvoice = getInvoiceById(id);
+    setInvoice(foundInvoice);
+    setLoading(false);
+  }, [id]);
 
   if (loading) {
-    return (
-      <div style={{ padding: '40px', textAlign: 'center' }}>
-        <h1>Loading...</h1>
-      </div>
-    );
+    return <div style={{ padding: '40px', textAlign: 'center' }}><h1>Loading...</h1></div>;
   }
 
   if (!invoice) {
@@ -53,8 +36,8 @@ export default function InvoicePage({ params }: Props) {
   }
 
   return (
-    <PageContainer>
-      <InvoiceDetail invoice={invoice} />
-    </PageContainer>
+    <InvoiceDetail invoice={invoice} />
   );
 }
+
+;

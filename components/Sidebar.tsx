@@ -1,6 +1,8 @@
+//Sidebar.tsx
 import styled from 'styled-components'
-import colors from '@/lib/constants/colors'
 import Image from 'next/image'
+import colors from '@/lib/constants/colors'
+import device from '@/lib/constants/breakpoints'
 
 function Sidebar() {
   return (
@@ -21,13 +23,13 @@ function Sidebar() {
      
        <NavItemContainer isAvatar={false}>
         <NavItem>
-        <Image
-         src="/appSvgs/Path.svg"
-         alt="Logo"
-         width={24}
-         height={24}
-         style={{filter: `brightness(0.5) sepia(1) hue-rotate(210deg) saturate(2)`}}
-        />
+          <Image
+           src="/appSvgs/Path.svg"
+           alt="Logo"
+           width={24}
+           height={24}
+           style={{filter: 'brightness(0.5) sepia(1) hue-rotate(210deg) saturate(2)'}}
+          />
         </NavItem>
         </NavItemContainer>
        <NavItemContainer isAvatar>
@@ -60,6 +62,13 @@ const SidebarContainer = styled.aside`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 120;
+  @media (${device.tablet}) {
+    width: 100%;
+    flex-direction: row;
+    height: 80px;
+    border-top-right-radius: 0;
+    gap: 16px;
+  }
 `
 
 const SidebarCap = styled.div`
@@ -71,6 +80,12 @@ const SidebarCap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  @media (${device.tablet}) {
+    height: 100%;
+    width: 80px;
+    padding: 0;
+  }
 `
 
 
@@ -81,6 +96,12 @@ const NavItemContainer = styled.div<{ isAvatar?: boolean }>`
   align-items: center;
   justify-content: center;
   border-top: ${(props) => (props.isAvatar ? '1px solid rgba(255, 255, 255, 0.1)' : 'none')};
+  
+  @media (${device.tablet}) {
+    width: auto;
+    padding: 0;
+    border-top: none;
+  }
 `
 
 const NavItem = styled.button<{ isActive?: boolean; isAvatar?: boolean }>`
@@ -132,4 +153,13 @@ const SidebarFooter = styled.div`
   flex-direction: column;
   gap: 9px;
   margin-top: auto;
+  
+  @media (${device.tablet}) {
+    flex-direction: row;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: 32px;
+    width: auto;
+    gap: 16px;
+  }
 `

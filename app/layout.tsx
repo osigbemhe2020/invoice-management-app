@@ -1,3 +1,4 @@
+// layout.tsx
 import type { Metadata } from "next";
 import { League_Spartan } from "next/font/google";
 import "./globals.css";
@@ -5,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import styled from "styled-components";
 import ThemeProvider from "@/components/ThemeProvider";
 import colors from "@/lib/constants/colors";
+import device from "@/lib/constants/breakpoints";
 
 const leagueSpartan = League_Spartan({
   variable: "--font-league-spartan",
@@ -17,6 +19,11 @@ const AppContainer = styled.div`
   height: 100vh;
   width: 100%;
   background-color: ${colors.lightBG};
+ @media (${device.tablet}) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 `;
 
 export const metadata: Metadata = {

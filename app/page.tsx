@@ -3,10 +3,10 @@
 
 import { useState, useEffect } from 'react';
 import InvoiceList from '@/components/InvoiceList'
-import { getInvoices, addInvoice, initializeInvoices } from '@/lib/localStorage'
+import { getInvoices, addInvoice } from '@/lib/localStorage'
 import colors from '@/lib/constants/colors'
 import styled from 'styled-components'
-import { Invoice } from '@/types/invoice'
+import { Invoice, InvoiceItem } from '@/types/invoice'
 
 import LeftModal from '@/components/LeftModal'
 import InvoiceForm from '@/components/InvoiceForm'
@@ -18,9 +18,8 @@ function Page() {
 
   const count = invoices.length
 
-  // Initialize invoices from localStorage on mount
+  // Load invoices from localStorage on mount
   useEffect(() => {
-    // initializeInvoices() // Temporarily disabled to test EmptyState
     setInvoices(getInvoices())
   }, [])
 
@@ -28,14 +27,58 @@ function Page() {
     setIsModalOpen(!isModalOpen)
   }
 
-  const handleInvoiceSubmit = (data: Invoice) => {
-    // Create new invoice (editing is handled in InvoiceDetail)
-    addInvoice(data)
-    setInvoices(getInvoices())
-    toggleModal()
+  const handleInvoiceSubmit = (data: any) => {
+  const submittedInvoice: Invoice = {
+    ...data,
+    from: data.billFrom, // ✅ remap back to what Invoice type expect // Use address as company name
+    paymentDue: calculatePaymentDue(data.invoiceDate, data.paymentTerms), // Calculate payment due date
+    amount: calculateTotal(data.items), // Calculate total amount from items
+    id: data.id || generateInvoiceId(),
+    status: 'Pending' as const,
+  }
+  addInvoice(submittedInvoice)
+  setInvoices(getInvoices())
+  toggleModal()
+}
+
+  // Generate random invoice ID
+  const generateInvoiceId = (): string => {
+    const randomNum = Math.floor(Math.random() * 100000)
+    const randomLetters = Math.random().toString(36).substring(2, 6).toUpperCase()
+    return `${randomLetters}${randomNum}`
+  }
+
+  // Calculate payment due date based on payment terms
+  const calculatePaymentDue = (invoiceDate: string, paymentTerms: string): string => {
+    const date = new Date(invoiceDate)
+    const days = paymentTerms.includes('15') ? 15 : paymentTerms.includes('60') ? 60 : 30
+    const dueDate = new Date(date.getTime() + (days * 24 * 60 * 60 * 1000))
+    return dueDate.toISOString().split('T')[0]
+  }
+
+  // Calculate total amount from invoice items
+  const calculateTotal = (items: InvoiceItem[]): string => {
+    const total = items.reduce((sum, item) => sum + item.total, 0)
+    return total.toFixed(2)
   }
 
   const handleInvoiceCancel = () => {
+    toggleModal()
+  }
+
+  const handleSaveAsDraft = (data: any) => {
+    // Save as draft (editing is handled in InvoiceDetail)
+    const draftInvoice: Invoice = {
+      ...data,
+      from: data.billFrom, // ✅ remap back to what Invoice type expects
+      companyName: data.billFrom.address.split(',')[0] || 'Unknown Company', // Use address as company name
+      paymentDue: calculatePaymentDue(data.invoiceDate, data.paymentTerms), // Calculate payment due date
+      amount: calculateTotal(data.items), // Calculate total amount from items
+      id: data.id || generateInvoiceId(), // Use existing ID or generate new one
+      status: 'Draft' as const // Ensure it's saved as draft
+    }
+    addInvoice(draftInvoice)
+    setInvoices(getInvoices())
     toggleModal()
   }
 
@@ -43,10 +86,11 @@ function Page() {
   const defaultInvoice: Invoice = {
     id: '',
     status: 'Draft',
-    companyName: '',
+    companyName: '', // Will be populated from billFrom.address
     invoiceDate: '',
-    paymentDue: '',
+    paymentDue: '', // Will be calculated from invoiceDate and paymentTerms
     paymentTerms: 'Net 30 Days',
+    amount: '0.00', // Will be calculated from items
     from: {
       address: '',
       city: '',
@@ -98,6 +142,7 @@ function Page() {
         invoice={defaultInvoice}
         onSubmit={handleInvoiceSubmit}
         onCancel={handleInvoiceCancel}
+        onSaveAsDraft={handleSaveAsDraft}
         mode="create"
       />
       </LeftModal>

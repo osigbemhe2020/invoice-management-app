@@ -15,8 +15,8 @@ function InvoiceRow({ invoice }: { invoice: Invoice }) {
   return (
     <InvoiceRowContainer onClick={handleRowClick}>
       <InvoiceId>#{invoice.id}</InvoiceId>
-      <InvoiceDate>{invoice.dueDate}</InvoiceDate>
-      <InvoiceCustomer>{invoice.customer}</InvoiceCustomer>
+      <InvoiceDate>{invoice.paymentDue}</InvoiceDate>
+      <InvoiceCustomer>{invoice.billTo.name}</InvoiceCustomer>
       <InvoiceAmount>{invoice.amount}</InvoiceAmount>
       <StatusBadge $status={invoice.status}>
         ● {invoice.status}

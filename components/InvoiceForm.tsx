@@ -8,24 +8,18 @@ import { Invoice, InvoiceItem, BillFrom, BillTo } from '@/types/invoice'
 interface FormValues {
   id: string;
   status: 'Draft' | 'Pending' | 'Paid';
-  companyName: string;
   invoiceDate: string;
-  paymentDue: string;
   paymentTerms: string;
   billFrom: BillFrom;
   billTo: BillTo;
   sentTo: string;
   items: InvoiceItem[];
-  projectDescription: string;
+  projectDescription?: string;
 }
 
 // Validation Schema
 const InvoiceSchema = Yup.object().shape({
-  id: Yup.string().required('Invoice ID is required'),
-  status: Yup.mixed<'Draft' | 'Pending' | 'Paid'>().oneOf(['Draft', 'Pending', 'Paid']).required('Status is required'),
-  companyName: Yup.string().required('Company name is required'),
   invoiceDate: Yup.string().required('Invoice date is required'),
-  paymentDue: Yup.string().required('Payment due date is required'),
   paymentTerms: Yup.string().required('Payment terms are required'),
   billFrom: Yup.object().shape({
     address: Yup.string().required('Street address is required'),
@@ -49,32 +43,31 @@ const InvoiceSchema = Yup.object().shape({
       total: Yup.number().required('Total is required'),
     })
   ).min(1, 'At least one item is required'),
-  projectDescription: Yup.string().required('Project description is required'),
+  projectDescription: Yup.string().optional(),
 });
 
 interface InvoiceFormProps {
   invoice: Invoice;
   onSubmit: (data: any) => void;
   onCancel: () => void;
+  onSaveAsDraft?: (data: any) => void;
   mode: 'create' | 'edit';
 }
 
 // Styled Components
 
 // Component
-function InvoiceFormComponent({ invoice, onSubmit, onCancel, mode }: InvoiceFormProps) {
+function InvoiceFormComponent({ invoice, onSaveAsDraft, onSubmit, onCancel, mode }: InvoiceFormProps) {
   const initialValues: FormValues = {
     id: invoice.id,
     status: invoice.status,
-    companyName: invoice.companyName,
     invoiceDate: invoice.invoiceDate,
-    paymentDue: invoice.paymentDue,
     paymentTerms: 'Net 30 Days',
     billFrom: invoice.from,
     billTo: invoice.billTo,
     sentTo: invoice.sentTo,
     items: invoice.items,
-    projectDescription: invoice.companyName,
+    projectDescription: invoice.projectDescription || '',
   };
 
   return (
@@ -172,7 +165,7 @@ function InvoiceFormComponent({ invoice, onSubmit, onCancel, mode }: InvoiceForm
               <FormRow>
                 <FormGroup>
                   <FormLabel>Invoice Date</FormLabel>
-                  <Field name="invoiceDate" as={FormInput} />
+                  <Field name="invoiceDate" type="date" as={FormInput} />
                   <ErrorMessage name="invoiceDate" component={ErrorText} />
                 </FormGroup>
                 <FormGroup>
@@ -271,12 +264,19 @@ function InvoiceFormComponent({ invoice, onSubmit, onCancel, mode }: InvoiceForm
           </FormContent>
 
           <FormActions>
+            <div>
             <Button type="button" variant="cancel" onClick={onCancel}>
-              Cancel
+              Discard
             </Button>
+            </div>
+            <div style={{ display: 'flex', gap: '12px' }}>
+            <Button type="button" variant="save" onClick={() => onSaveAsDraft?.(values)}>
+            Save as Draft
+          </Button>
             <Button type="submit" variant="submit" disabled={isSubmitting}>
               {mode === 'edit' ? 'Update Invoice' : 'Create Invoice'}
             </Button>
+            </div>
           </FormActions>
         </InvoiceForm>
       )}
@@ -286,7 +286,7 @@ function InvoiceFormComponent({ invoice, onSubmit, onCancel, mode }: InvoiceForm
 
 export default InvoiceFormComponent
 
-const InvoiceForm = styled.form`
+const InvoiceForm = styled(Form)`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -524,11 +524,10 @@ const AddItemButton = styled.button`
 
 const FormActions = styled.div`
   display: flex;
-  gap: 12px;
   padding: 16px 24px;
   background: #f9fafb;
   border-radius: 0 0 8px 8px;
-  justify-content: flex-end;
+  justify-content: space-between;
 `
 
 const ErrorText = styled.div`
@@ -538,10 +537,10 @@ const ErrorText = styled.div`
   font-weight: 500;
 `
 
-const Button = styled.button<{ variant?: 'cancel' | 'submit' }>`
-  padding: 10px 24px;
+const Button = styled.button<{ variant?: 'cancel' | 'submit' | 'save' }>`
+  padding: 15px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: 24px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -560,13 +559,29 @@ const Button = styled.button<{ variant?: 'cancel' | 'submit' }>`
   `}
 
   ${props => props.variant === 'submit' && `
-    background: #7c3aed;
+    background: ${colors.mainPurple};
     color: white;
     box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 
     &:hover {
-      background: #6d28d9;
+      background: ${colors.lightPurple};
       box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  `}
+
+  ${props => props.variant === 'save' && `
+    background: #373B53;
+    color: ${colors.ourSlate};
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+
+    &:hover {
+      background: #617770ff;
+      box-shadow: 0 6px 16px rgba(65, 121, 102, 0.4);
       transform: translateY(-2px);
     }
 

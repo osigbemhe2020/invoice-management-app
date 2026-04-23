@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Invoice } from '@/types/invoice'
 import { useRouter } from 'next/navigation'
 import colors from '@/lib/constants/colors'
+import device from '@/lib/constants/breakpoints'
 import LeftModal from './LeftModal'
 import InvoiceForm from './InvoiceForm'
 import CenterModal from './CenterModal';
@@ -29,19 +30,31 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
   }
 
   const handleMarkAsPaid = () => {
-    // In a real app, this would update the invoice status to 'paid'
-    console.log('Mark as paid:', invoice.id)
-    // For now, just show a success message
-    alert('Invoice marked as paid!')
+    // Update the invoice status to 'paid' in localStorage
+    const { updateInvoice } = require('@/lib/localStorage')
+    const success = updateInvoice(invoice.id, { status: 'Paid' })
+    
+    if (success) {
+      alert('Invoice marked as paid!')
+      // Refresh the page to show updated status
+      window.location.reload()
+    } else {
+      alert('Failed to mark invoice as paid')
+    }
   }
 
   const handleDeleteConfirm = () => {
-    // In a real app, this would delete the invoice
-    console.log('Delete invoice:', invoice.id)
-    // For now, just show a success message
-    alert('Invoice deleted!')
-    setIsDeleteModalOpen(false)
-    router.push('/')
+    // Delete the invoice from localStorage
+    const { deleteInvoice } = require('@/lib/localStorage')
+    const success = deleteInvoice(invoice.id)
+    
+    if (success) {
+      alert('Invoice deleted successfully!')
+      setIsDeleteModalOpen(false)
+      router.push('/')
+    } else {
+      alert('Failed to delete invoice')
+    }
   }
 
   const handleCancel = () => {
@@ -93,7 +106,7 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
           {/* Invoice Date */}
           <GridItem>
             <GridLabel>Invoice Date</GridLabel>
-            <GridValue>{invoice.dueDate}</GridValue>
+            <GridValue>{invoice.paymentDue}</GridValue>
           </GridItem>
 
           {/* Payment Due */}
@@ -189,9 +202,11 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
 
 const InvoiceDetailContainer = styled.div`
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   max-width: 730px;
   margin: 0 auto;
-  height: 100%;
   overflow-y: auto;
   margin-top: 40px;
   padding: 15px 0;
@@ -229,11 +244,6 @@ const InvoiceControls = styled.div`
   padding: 20px 32px;
   background-color: white;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: px;
-    align-items: flex-start;
-  }
 `
 
 const StatusSection = styled.div`
@@ -288,11 +298,6 @@ export const StatusBadge = styled.span<{ $status: string }>`
 const ActionButtons = styled.div`
   display: flex;
   gap: 8px;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    flex-wrap: wrap;
-  }
 `
 
 

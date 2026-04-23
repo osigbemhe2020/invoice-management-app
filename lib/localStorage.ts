@@ -66,18 +66,3 @@ export const getInvoiceById = (id: string): Invoice | null => {
   return invoices.find(inv => inv.id === id) || null
 }
 
-// Initialize localStorage with sample data if empty
-export const initializeInvoices = (): void => {
-  if (typeof window === 'undefined') return
-  
-  const existingInvoices = getInvoices()
-  
-  if (existingInvoices.length === 0) {
-    // Import sample data
-    import('./invoice').then((invoiceModule) => {
-      saveInvoices(invoiceModule.default)
-    }).catch(error => {
-      console.error('Error loading sample invoices:', error)
-    })
-  }
-}
