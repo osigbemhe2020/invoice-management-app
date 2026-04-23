@@ -4,6 +4,7 @@ import { Invoice } from '@/types/invoice'
 import styled from "styled-components"
 import { useRouter } from 'next/navigation'
 import { StatusBadge } from './InvoiceDetail'
+import device from '@/lib/constants/breakpoints'
 
 function InvoiceRow({ invoice }: { invoice: Invoice }) {
   const router = useRouter()
@@ -27,24 +28,6 @@ function InvoiceRow({ invoice }: { invoice: Invoice }) {
 }
 
 export default InvoiceRow
-
-const InvoiceRowContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 1.2fr 1fr 1.2fr auto;
-  gap: 10px;
-  align-items: center;
-  padding: 16px 32px;
-  background-color: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
-  &:hover {
-    border-color: #d1d5db;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  }
-`
 
 const InvoiceId = styled.div`
   font-weight: 700;
@@ -85,5 +68,62 @@ const ActionButton = styled.button`
   &:hover {
     background-color: #f3f4f6;
     color: #6b7280;
+  }
+`
+
+const InvoiceRowContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1.2fr 1fr 1.2fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  @media (${device.tablet}) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 8px;
+    padding: 12px 20px;
+
+    ${ActionButton} {
+      display: none;
+    }
+
+    ${InvoiceId} {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    ${InvoiceDate} {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: right;
+    }
+
+    ${InvoiceCustomer} {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    ${InvoiceAmount} {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    ${StatusBadge} {
+      grid-column: 2;
+      grid-row: 3;
+      text-align: right;
+      justify-self: flex-end;
+    }
   }
 `

@@ -164,7 +164,7 @@ export default function InvoiceDetail({ invoice }: { invoice: Invoice }) {
       <LeftModal 
         isOpen={isEditModalOpen} 
         toggleModal={() => setIsEditModalOpen(false)}
-        width="719px"
+       
       >
         <InvoiceForm 
           invoice={invoice}

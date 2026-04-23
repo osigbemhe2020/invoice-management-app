@@ -1,6 +1,7 @@
 import React from 'react';
 import Portal from './portal';
 import styled from 'styled-components';
+import device from '@/lib/constants/breakpoints';
 import Image from 'next/image';
 
 interface LeftModalProps {
@@ -98,16 +99,18 @@ const MainContainer = styled.div<MainContainerProps>`
   cursor: auto;
   background-color: ${({ theme, $bgcolor }) => $bgcolor ?? (theme?.color?.white || '#ffffff')};
   border-radius: ${({ $borderRadius }) => $borderRadius ?? '0'}px;
-  width: ${({ $width }) => ($width ? $width : `600px`)};
-  height: ${({ $height }) => $height ?? '100%'};
-  max-height: ${({ $height }) => ($height === 'auto' ? '100%' : '')};
+  width: 719px;
+  height: 100%;
+  max-height: 100%;
   transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '-100%')});
   transition: transform 0.3s ease-in-out;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   overflow-y: auto;
   padding-left: 80px;
-
+  @media (${device.tablet}) {
+    padding-left: 10px;
+  }
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
@@ -116,6 +119,13 @@ const MainContainer = styled.div<MainContainerProps>`
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+
+  @media (${device.tablet}) {
+    width: 616px;
+    max-height: calc(100% - 80px);
+    top: 80px;
+    margin-top: 80px;
+  }
 `;
 
 const CloseButton = styled.button`

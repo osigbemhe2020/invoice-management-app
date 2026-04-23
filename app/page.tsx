@@ -136,7 +136,7 @@ function Page() {
       <LeftModal 
         isOpen={isModalOpen} 
         toggleModal={toggleModal}
-        width="719px"
+        
       >
         <InvoiceForm 
         invoice={defaultInvoice}

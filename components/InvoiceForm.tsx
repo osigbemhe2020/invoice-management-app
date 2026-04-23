@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import colors from '@/lib/constants/colors'
+import device from '@/lib/constants/breakpoints'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { Invoice, InvoiceItem, BillFrom, BillTo } from '@/types/invoice'
@@ -294,6 +295,10 @@ const InvoiceForm = styled(Form)`
   padding: 0px;
   max-width: 600px;
   background: white;
+
+  @media (${device.tablet}) {
+    max-width: 100%;
+  }
 `
 
 const FormHeader = styled.div`
@@ -322,6 +327,11 @@ const FormContent = styled.div`
   padding: 0px 24px;
   overflow-y: auto;
   flex: 1;
+  @media (${device.tablet}) { 
+    margin:0;
+    max-width: 100%;
+
+  }
 `
 
 const FormSection = styled.div`
@@ -404,9 +414,6 @@ const FormRow = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
 `
 
 const ItemsTable = styled.div`
