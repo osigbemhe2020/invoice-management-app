@@ -4,7 +4,7 @@ A full-featured invoice management application built with **Next.js 14**, **Type
 
 ---
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
@@ -44,7 +44,7 @@ No environment variables are required. The app uses `localStorage` for data pers
 
 ---
 
-## 🏗️ Architecture Explanation
+##  Architecture Explanation
 
 ### Tech Stack
 
@@ -185,7 +185,7 @@ The app uses Next.js **App Router**. The invoice detail page uses a dynamic segm
 
 ---
 
-## ✨ Improvements Beyond Requirements
+## Improvements Beyond Requirements
 
 ### Dark Mode
 Full dark/light theme toggle accessible via the sidebar moon icon. Every component — forms, modals, cards, badges — responds to the theme. The preference is held in React Context and survives navigation within the session.
